@@ -1576,6 +1576,15 @@ enable_value()
         fi
 }
 
+disable_value()
+{
+        if test "x$1" = "xno" ; then
+                echo 1
+        else
+                echo 0
+        fi
+}
+
 journald_mode()
 {
   if test "x$with_systemd_journal" = "xno"; then
@@ -1621,6 +1630,7 @@ AC_DEFINE_UNQUOTED(PACKAGE_NAME, "$PACKAGE_NAME", [package name])
 
 AC_DEFINE_UNQUOTED(WITH_COMPILE_DATE, $wcmp_date, [Include the compile date in the binary])
 AC_DEFINE_UNQUOTED(ENABLE_FORCED_SERVER_MODE, `enable_value $enable_forced_server_mode`, [Enable forced server mode])
+AC_DEFINE_UNQUOTED(USE_PE_VERSION_MAPPING, `disable_value $enable_forced_server_mode`, [Use PE version mapping])
 AC_DEFINE_UNQUOTED(ENABLE_DEBUG, `enable_value $enable_debug`, [Enable debugging])
 AC_DEFINE_UNQUOTED(ENABLE_LIBUUID, `enable_value $enable_libuuid`, [Enable libuuid support])
 AC_DEFINE_UNQUOTED(ENABLE_GPROF, `enable_value $enable_gprof`, [Enable gcc profiling])
