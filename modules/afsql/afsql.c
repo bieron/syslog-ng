@@ -32,6 +32,7 @@
 #include "stats/stats-registry.h"
 #include "apphook.h"
 #include "timeutils.h"
+#include "mainloop.h"
 #include "mainloop-worker.h"
 
 #include <string.h>
@@ -1177,6 +1178,13 @@ afsql_dd_init(LogPipe *s)
   AFSqlDestDriver *self = (AFSqlDestDriver *) s;
   GlobalConfig *cfg = log_pipe_get_config(s);
   gint len_cols, len_values;
+  MainLoop *main_loop = main_loop_get_instance();
+
+  if (!main_loop_is_server_mode(main_loop))
+    {
+      msg_error("syslog-ng running in client/relay mode, SQL destination is unavailable", NULL);
+      return FALSE;
+    }
 
   if (!log_dest_driver_init_method(s))
     return FALSE;

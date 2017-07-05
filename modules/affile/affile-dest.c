@@ -27,6 +27,7 @@
 #include "serialize.h"
 #include "gprocess.h"
 #include "stats/stats-registry.h"
+#include "mainloop.h"
 #include "mainloop-call.h"
 #include "transport/transport-file.h"
 #include "logproto/logproto-text-client.h"
@@ -266,6 +267,14 @@ static void
 affile_dw_queue(LogPipe *s, LogMessage *lm, const LogPathOptions *path_options, gpointer user_data)
 {
   AFFileDestWriter *self = (AFFileDestWriter *) s;
+  MainLoop *main_loop = main_loop_get_instance();
+
+  if (!main_loop_is_server_mode(main_loop) && lm->saddr && lm->saddr->sa.sa_family != AF_UNIX)
+    {
+      msg_error("syslog-ng running in client/relay mode, network messages cannot be written to files", NULL);
+      log_msg_drop(lm, path_options, AT_PROCESSED);
+      return;
+    }
 
   g_static_mutex_lock(&self->lock);
   self->last_msg_stamp = cached_g_current_time_sec();

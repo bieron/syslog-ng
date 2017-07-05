@@ -108,7 +108,14 @@ java_dd_init(LogPipe *s)
 {
   JavaDestDriver *self = (JavaDestDriver *)s;
   GlobalConfig *cfg = log_pipe_get_config(s);
+  MainLoop *main_loop = main_loop_get_instance();
   GError *error = NULL;
+
+  if (!main_loop_is_server_mode(main_loop))
+    {
+      msg_error("syslog-ng running in client/relay mode, Java destination is unavailable", NULL);
+      return FALSE;
+    }
 
   if (!log_dest_driver_init_method(s))
     return FALSE;

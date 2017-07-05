@@ -53,6 +53,7 @@ set (SYSLOG_NG_JAVA_MODULE_PATH "\${exec_prefix}/lib/syslog-ng/java-modules")
 set (LIBDIR "\${exec_prefix}/lib")
 set (INCLUDEDIR "\${prefix}/include")
 set (TOOLSDIR "\${datadir}/syslog-ng/tools")
+set (SYSLOG_NG_ENABLE_FORCED_SERVER_MODE 1)
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES RelWithDebInfo)
   set (SYSLOG_NG_ENABLE_DEBUG 1)
